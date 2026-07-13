@@ -7,11 +7,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Service
@@ -20,20 +18,13 @@ public class JwtService {
     @Autowired
     private UserRepository userRepository;
 
-     private static final long ONE_DAY = 24L * 60 * 60 * 1000;
-     private final String SECRET_KEY;
+    private static final long ONE_DAY = 24L * 60 * 60 * 1000;
 
-     public JwtService(){
+    private final String SECRET_KEY;
 
-         try {
-             KeyGenerator keygen = KeyGenerator.getInstance("HmacSHA256");
-             SecretKey key = keygen.generateKey();
-             SECRET_KEY = Base64.getEncoder().encodeToString(key.getEncoded());
-         } catch (NoSuchAlgorithmException e) {
-             throw new RuntimeException(e);
-         }
-
-     }
+    public JwtService(@Value("${jwt.secret}") String jwtSecret) {
+        this.SECRET_KEY = jwtSecret;
+    }
 
      public String generateToken(Long id){
 

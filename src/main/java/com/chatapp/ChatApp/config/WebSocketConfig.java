@@ -1,6 +1,7 @@
 package com.chatapp.ChatApp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -13,6 +14,9 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig
         implements WebSocketMessageBrokerConfigurer {
 
+    @Value("${frontend.url}")
+    private String frontEnd;
+
     @Autowired
     private SocketUserMapperInterceptor socketUserMapperInterceptor;
 
@@ -21,7 +25,7 @@ public class WebSocketConfig
             StompEndpointRegistry registry) {
 
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*");
+                .setAllowedOriginPatterns(frontEnd);
     }
 
     @Override
