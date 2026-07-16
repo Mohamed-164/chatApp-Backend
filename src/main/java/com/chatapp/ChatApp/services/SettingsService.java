@@ -165,7 +165,6 @@ public class SettingsService {
 
         userRepository.save(user);
 
-        Set<UserEntity> friends = user.getFriends();
         FriendDto friendDto = new FriendDto();
         friendDto.setName(user.getName());
         friendDto.setMail(user.getMail());
@@ -188,8 +187,9 @@ public class SettingsService {
             user.setProfile_url(null);
             userRepository.save(user);
 
-            Set<UserEntity> friends = user.getFriends();
             FriendDto friendDto = new FriendDto();
+            friendDto.setName(user.getName());
+            friendDto.setMail(user.getMail());
             friendDto.setNumber(user.getNumber());
             friendDto.setProfile_url(user.getProfile_url());
 
