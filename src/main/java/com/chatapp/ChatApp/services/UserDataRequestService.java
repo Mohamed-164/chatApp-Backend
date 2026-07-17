@@ -102,7 +102,7 @@ public class UserDataRequestService {
         return true;
     }
 
-    public boolean giveRequestToFriend(Long myId,Long friendId){
+    public boolean ManageRequestToFriend(Long myId,Long friendId,boolean addRequest){
 
         if(userRepository.isBlocked(friendId,myId)) return false;
 
@@ -112,7 +112,11 @@ public class UserDataRequestService {
         UserEntity Friend = userRepository.findById(friendId).orElse(null);
         if(Friend == null) return false;
 
-        Friend.getRequests().add(Me);
+        if(addRequest){
+            Friend.getRequests().add(Me);
+        }else{
+            Friend.getRequests().remove(Me);
+        }
 
         userRepository.save(Friend);
 
@@ -122,7 +126,7 @@ public class UserDataRequestService {
 
             messagingTemplate.convertAndSendToUser(
                     Friend.getNumber()+"",
-                    "/queue/incoming.friend.request",
+                    addRequest?"/queue/incoming.friend.request":"/queue.delete.request",
                     friendDto
             );
 
@@ -161,6 +165,5 @@ public class UserDataRequestService {
 
         return chatMessageDtos;
     }
-
 
 }

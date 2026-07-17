@@ -37,10 +37,20 @@ public class UserDataRequestController {
 
     }
 
-    @PostMapping("/addfriend")
-    public ResponseEntity<Void> addFriend(@RequestBody FriendRequestDto friendRequestDto){
+    @PostMapping("/addRequest")
+    public ResponseEntity<Void> addRequest(@RequestBody FriendRequestDto friendRequestDto){
 
-        boolean updated = userDataRequestService.giveRequestToFriend(friendRequestDto.getMyID(),friendRequestDto.getFriendID());
+        boolean updated = userDataRequestService.ManageRequestToFriend(friendRequestDto.getMyID(),friendRequestDto.getFriendID(),true);
+
+        if(!updated) return ResponseEntity.internalServerError().build();
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/removeRequest")
+    public ResponseEntity<Void> removeRequest(@RequestBody FriendRequestDto friendRequestDto){
+
+        boolean updated = userDataRequestService.ManageRequestToFriend(friendRequestDto.getMyID(),friendRequestDto.getFriendID(),false);
 
         if(!updated) return ResponseEntity.internalServerError().build();
 
@@ -52,5 +62,7 @@ public class UserDataRequestController {
 
         return ResponseEntity.ok(userDataRequestService.getOneChatData(myId,friendId));
     }
+
+
 
 }
